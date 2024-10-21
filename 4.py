@@ -1,25 +1,30 @@
-in_stock = {"coffee": 0, "milk": 0, "cream": 0}
-
-recipes = {
-    "Эспрессо": {"coffee": 1},
-    "Капучино": {"coffee": 1, "milk": 3},
-    "Макиато": {"coffee": 2, "milk": 1},
-    "Кофе по-венски": {"coffee": 1, "cream": 2},
-    "Латте Макиато": {"coffee": 1, "milk": 2, "cream": 1},
-    "Кон Панна": {"coffee": 1, "cream": 1}
-}
-
+in_stock = {"coffee": 1, "milk": 2, "cream": 3}
 def order(*preferences):
-    global in_stock
-    has_ingredients = lambda drink: all(in_stock[ingredient] >= amount for ingredient, amount in recipes[drink].items())
+    recipes = {
+        "Эспрессо": {"coffee": 1, "milk": 0, "cream": 0},
+        "Капучино": {"coffee": 1, "milk": 3, "cream": 0},
+        "Макиато": {"coffee": 2, "milk": 1, "cream": 0},
+        "Кофе по-венски": {"coffee": 1, "milk": 0, "cream": 2},
+        "Латте Макиато": {"coffee": 1, "milk": 2, "cream": 1},
+        "Кон Панна": {"coffee": 1, "milk": 0, "cream": 1}
+    }
+    result = []
     for drink in preferences:
-        if drink in recipes and has_ingredients(drink):
-            for ingredient, amount in recipes[drink].items():
-                in_stock[ingredient] -= amount
-            return drink
-            continue
-        return "К сожалению, не можем предложить Вам напиток"
-        continue
+        ingredients = recipes.get(drink)
+        if ingredients:
+            can_make = lambda x: in_stock[x] >= ingredients[x]
+            if all(can_make(ing) for ing in ingredients):
+                for ing in ingredients:
+                    in_stock[ing] -= ingredients[ing]
+                result.append(drink)
+                print(result)
+                result = []
+                continue
+        if not result:
+            print("К сожалению, не можем предложить Вам напиток")
+    return result
 
 in_stock = {"coffee": 4, "milk": 4, "cream": 0}
+print(order("Эспрессо", "Капучино", "Макиато", "Кофе по-венски", "Латте Макиато", "Кон Панна"))
+in_stock = {"coffee": 2, "milk": 4, "cream": 0}
 print(order("Капучино", "Макиато", "Эспрессо"))
