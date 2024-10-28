@@ -20,9 +20,10 @@ def order(*preferences):
                 print(result)
                 result = []
                 continue
-        if not result:
-            print("К сожалению, не можем предложить Вам напиток")
-    return result
+            else:
+                break
+           
+    return "К сожалению, не можем предложить Вам напиток"
 
 in_stock = {"coffee": 4, "milk": 4, "cream": 0}
 print(order("Эспрессо", "Капучино", "Макиато", "Кофе по-венски", "Латте Макиато", "Кон Панна"))
